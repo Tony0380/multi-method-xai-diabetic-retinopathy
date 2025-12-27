@@ -98,6 +98,49 @@ Data/
         └── lesion_detection/
 ```
 
+## Analisi Esplorativa dei Dati
+
+L'analisi esplorativa dei dataset ha evidenziato le seguenti caratteristiche:
+
+### Statistiche dei Dataset
+
+| Dataset | Immagini Totali | Split |
+|---------|-----------------|-------|
+| APTOS 2019 | 3,296 | Train: 2,930 / Val: 366 |
+| EyePACS 2015 | 35,126 | Train only |
+| Messidor-2 | 1,744 | Test set esterno |
+| DDR | 12,522 | Train: 6,265 / Val: 2,508 / Test: 3,749 |
+
+**Dataset Combinato per Training:** 38,056 immagini (APTOS train + EyePACS)
+
+### Distribuzione delle Classi
+
+La distribuzione delle classi mostra un significativo sbilanciamento, tipico dei dataset medici:
+
+| Classe | Nome | Immagini | Percentuale |
+|--------|------|----------|-------------|
+| 0 | No DR | 26,610 | 69.9% |
+| 1 | Mild | 2,911 | 7.6% |
+| 2 | Moderate | 6,152 | 16.2% |
+| 3 | Severe | 1,092 | 2.9% |
+| 4 | Proliferative | 1,291 | 3.4% |
+
+**Rapporto di sbilanciamento massimo:** 28.9:1 (classe 0 vs classe 3)
+
+### Visualizzazioni
+
+#### Distribuzione per Dataset
+![Distribuzione classi per dataset](results/class_distribution_by_dataset.png)
+
+#### Confronto tra Dataset
+![Confronto distribuzione classi](results/class_distribution_comparison.png)
+
+### Note sul Dataset DDR
+
+Il dataset DDR contiene originariamente una classe 5 ("ungradable") che e stata esclusa dall'analisi in quanto non rappresenta un grado di severita della DR ma indica immagini non classificabili.
+
+---
+
 ## Metriche di Valutazione
 
 | Categoria | Metrica |
