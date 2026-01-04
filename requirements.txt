@@ -1,0 +1,30 @@
+# Multi-Method XAI Diabetic Retinopathy
+# Requirements file - aggiornato con le dipendenze dei notebook
+
+# Data manipulation
+numpy>=1.21.0
+pandas>=1.3.0
+
+# Visualization
+matplotlib>=3.4.0
+seaborn>=0.11.0
+
+# Image processing
+opencv-python>=4.5.0
+Pillow>=8.0.0
+
+# Progress bar
+tqdm>=4.60.0
+
+# Jupyter
+jupyter>=1.0.0
+ipykernel>=6.0.0
+
+# Deep Learning (per notebook futuri)
+# torch>=2.0.0
+# torchvision>=0.15.0
+# timm>=0.9.0  # EfficientNet models
+
+# XAI (per notebook futuri)
+# grad-cam>=1.4.0
+# lime>=0.2.0

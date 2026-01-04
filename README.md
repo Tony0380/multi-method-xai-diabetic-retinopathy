@@ -141,6 +141,47 @@ Il dataset DDR contiene originariamente una classe 5 ("ungradable") che e stata 
 
 ---
 
+## Preprocessing delle Immagini
+
+Tutte le immagini sono state preprocessate con una pipeline unificata per garantire consistenza tra i dataset.
+
+### Pipeline di Preprocessing
+
+| Step | Operazione | Descrizione |
+|------|------------|-------------|
+| 1 | Crop bordi neri | Rimozione automatica dei bordi scuri attorno alla retina |
+| 2 | Resize | Ridimensionamento a 456x456 pixel (ottimale per EfficientNet-B5) |
+| 3 | CLAHE | Contrast Limited Adaptive Histogram Equalization per migliorare il contrasto locale |
+| 4 | Maschera circolare | Applicazione di una maschera circolare per uniformare le immagini |
+
+### Parametri CLAHE
+
+| Parametro | Valore |
+|-----------|--------|
+| Clip Limit | 2.0 |
+| Grid Size | 8x8 |
+
+### Statistiche Immagini Preprocessate
+
+| Dataset | Immagini | Split |
+|---------|----------|-------|
+| APTOS | 3,296 | Train: 2,930 / Val: 366 |
+| EyePACS | 35,126 | Train |
+| Messidor-2 | 1,744 | Test |
+| DDR | 12,522 | Train: 6,260 / Val: 2,503 / Test: 3,759 |
+
+**Totale:** 52,688 immagini preprocessate
+
+### Visualizzazione Pipeline
+
+![Pipeline di preprocessing](results/preprocessing_pipeline.png)
+
+### Esempi di Immagini Preprocessate
+
+![Esempi preprocessati](results/preprocessed_samples.png)
+
+---
+
 ## Metriche di Valutazione
 
 | Categoria | Metrica |
