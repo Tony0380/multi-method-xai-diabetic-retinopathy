@@ -1,0 +1,65 @@
+# Configurazione Progetto
+
+# Percorsi
+paths:
+  data_dir: "Data"
+  processed_dir: "Data/processed"
+  preprocessed_images: "Data/processed/images"
+  results_dir: "results"
+  checkpoints_dir: "checkpoints"
+  logs_dir: "logs"
+
+# Preprocessing
+preprocessing:
+  target_size: 456
+  clahe:
+    clip_limit: 2.0
+    grid_size: [8, 8]
+  apply_circle_crop: true
+  apply_clahe: true
+  output_format: ".png"
+
+# Data Augmentation
+augmentation:
+  horizontal_flip: true
+  vertical_flip: true
+  rotation_limit: 180
+  brightness_limit: 0.2
+  contrast_limit: 0.2
+  saturation_limit: 0.2
+  hue_shift_limit: 10
+  blur_limit: 3
+  noise_var_limit: [10, 50]
+  prob_geometric: 0.5
+  prob_color: 0.3
+  prob_blur: 0.1
+  prob_noise: 0.1
+
+# DataLoader
+dataloader:
+  batch_size: 16
+  num_workers: 4
+  pin_memory: true
+  shuffle_train: true
+  shuffle_val: false
+
+# Modello
+model:
+  architecture: "efficientnet_b5"
+  num_classes: 5
+  pretrained: true
+  dropout_rate: 0.4
+  class_names:
+    0: "No DR"
+    1: "Mild"
+    2: "Moderate"
+    3: "Severe"
+    4: "Proliferative"
+
+# Training
+training:
+  use_class_weights: true
+  use_oversampling: false
+
+# Seed
+seed: 42

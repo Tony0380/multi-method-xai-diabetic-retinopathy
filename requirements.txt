@@ -16,3 +16,14 @@ tqdm>=4.60.0
 # Jupyter
 jupyter>=1.0.0
 ipykernel>=6.0.0
+
+# Configuration
+PyYAML>=6.0
+
+# Deep Learning
+torch>=2.0.0
+torchvision>=0.15.0
+timm>=0.9.0  # EfficientNet models
+
+# Data Augmentation
+albumentations>=1.3.0

@@ -5,22 +5,22 @@ Progetto di Tesi di Laurea
 **Autore:** Antonio Colamartino
 **Email:** a.colamartino6@studenti.uniba.it
 **Matricola:** 778730
-**Universita:** Universita degli Studi di Bari Aldo Moro (UniBA)
+**Università:** Università degli Studi di Bari Aldo Moro (UniBA)
 
 ---
 
 ## Descrizione
 
-Questo progetto propone un sistema ibrido per la classificazione della retinopatia diabetica (Diabetic Retinopathy, DR) che combina le elevate prestazioni delle reti neurali profonde con l'interpretabilita delle regole estratte. L'obiettivo principale e sviluppare un sistema di supporto alle decisioni cliniche che sia sia accurato che comprensibile per i medici.
+Questo progetto propone un sistema ibrido per la classificazione della retinopatia diabetica (Diabetic Retinopathy, DR) che combina le elevate prestazioni delle reti neurali profonde con l'interpretabilità delle regole estratte. L'obiettivo principale è sviluppare un sistema di supporto alle decisioni cliniche che sia sia accurato che comprensibile per i medici.
 
-La retinopatia diabetica e una delle principali cause di cecità nel mondo e la sua diagnosi precoce e fondamentale per prevenire la perdita della vista. I modelli di deep learning hanno dimostrato eccellenti capacita predittive, ma la loro natura "black-box" limita l'adozione in ambito clinico dove la trasparenza delle decisioni e cruciale.
+La retinopatia diabetica è una delle principali cause di cecità nel mondo e la sua diagnosi precoce è fondamentale per prevenire la perdita della vista. I modelli di deep learning hanno dimostrato eccellenti capacità predittive, ma la loro natura "black-box" limita l'adozione in ambito clinico dove la trasparenza delle decisioni è cruciale.
 
 ## Obiettivi
 
 1. **Training di un modello CNN ad alte prestazioni** per la classificazione multi-classe della DR
 2. **Analisi dell'explainability** tramite tecniche di saliency mapping e validazione quantitativa
 3. **Estrazione di regole interpretabili** attraverso tre metodologie differenti
-4. **Sviluppo di un sistema ibrido** che integri CNN e regole in modalita operative diverse
+4. **Sviluppo di un sistema ibrido** che integri CNN e regole in modalità operative diverse
 
 ## Architettura del Progetto
 
@@ -51,7 +51,7 @@ Tre metodi comparati per l'estrazione di regole interpretabili:
 
 ### Fase 4 - Sistema Ibrido
 
-| Modalita | Strategia |
+| Modalità | Strategia |
 |----------|-----------|
 | Post-hoc Explanation | CNN prediction con post-hoc rule explanation |
 | Rule-guided Prediction | IF rule confidence > 0.8 THEN use rule ELSE use CNN |
@@ -137,7 +137,7 @@ La distribuzione delle classi mostra un significativo sbilanciamento, tipico dei
 
 ### Note sul Dataset DDR
 
-Il dataset DDR contiene originariamente una classe 5 ("ungradable") che e stata esclusa dall'analisi in quanto non rappresenta un grado di severita della DR ma indica immagini non classificabili.
+Il dataset DDR contiene originariamente una classe 5 ("ungradable") che è stata esclusa dall'analisi in quanto non rappresenta un grado di severità della DR ma indica immagini non classificabili.
 
 ---
 
@@ -182,6 +182,40 @@ Tutte le immagini sono state preprocessate con una pipeline unificata per garant
 
 ---
 
+## Data Augmentation
+
+Per migliorare la generalizzazione del modello e contrastare l'overfitting, viene applicata una pipeline di data augmentation durante il training.
+
+### Trasformazioni Applicate
+
+| Trasformazione | Parametri | Probabilità |
+|----------------|-----------|-------------|
+| Horizontal Flip | - | 50% |
+| Vertical Flip | - | 50% |
+| Rotazione | limite 180 gradi | 50% |
+| Brightness/Contrast | +/- 20% | 30% |
+| Hue/Saturation | hue +/- 10, sat +/- 20% | 30% |
+| Gaussian Blur | kernel max 3 | 10% |
+| Gaussian Noise | varianza 10-50 | 10% |
+
+### Gestione Class Imbalance
+
+Data la forte sproporzione tra le classi, vengono utilizzati class weights per bilanciare la loss function:
+
+| Classe | Nome | Weight |
+|--------|------|--------|
+| 0 | No DR | 0.28 |
+| 1 | Mild | 2.77 |
+| 2 | Moderate | 1.25 |
+| 3 | Severe | 7.41 |
+| 4 | Proliferative | 8.08 |
+
+### Esempi di Augmentation
+
+![Esempi augmentation](results/augmentation_examples.png)
+
+---
+
 ## Metriche di Valutazione
 
 | Categoria | Metrica |
@@ -199,5 +233,5 @@ Tutte le immagini sono state preprocessate con una pipeline unificata per garant
 
 **Antonio Colamartino**
 Email: a.colamartino6@studenti.uniba.it
-Universita degli Studi di Bari Aldo Moro
+Università degli Studi di Bari Aldo Moro
 Matricola: 778730
