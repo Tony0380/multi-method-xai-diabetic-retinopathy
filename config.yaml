@@ -28,12 +28,8 @@ augmentation:
   contrast_limit: 0.2
   saturation_limit: 0.2
   hue_shift_limit: 10
-  blur_limit: 3
-  noise_var_limit: [10, 50]
   prob_geometric: 0.5
   prob_color: 0.3
-  prob_blur: 0.1
-  prob_noise: 0.1
 
 # DataLoader
 dataloader:

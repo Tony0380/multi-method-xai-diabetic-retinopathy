@@ -195,8 +195,6 @@ Per migliorare la generalizzazione del modello e contrastare l'overfitting, vien
 | Rotazione | limite 180 gradi | 50% |
 | Brightness/Contrast | +/- 20% | 30% |
 | Hue/Saturation | hue +/- 10, sat +/- 20% | 30% |
-| Gaussian Blur | kernel max 3 | 10% |
-| Gaussian Noise | varianza 10-50 | 10% |
 
 ### Gestione Class Imbalance
 
