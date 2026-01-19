@@ -11,13 +11,56 @@ paths:
 
 # Preprocessing
 preprocessing:
+  # CSV di input (generato da 03b_data_validation)
+  input_csv: "Data/processed/validated_images.csv"
+
+  # Dimensione target per le immagini
   target_size: 456
-  clahe:
-    clip_limit: 2.0
-    grid_size: [8, 8]
-  apply_circle_crop: true
-  apply_clahe: true
+
+  # Formato di output
   output_format: ".png"
+
+  # Numero di worker per multiprocessing (0 = auto)
+  num_workers: 0
+
+  # Tecniche di preprocessing (abilitabili singolarmente)
+  techniques:
+    # Rimozione bordi neri
+    black_border_crop:
+      enabled: true
+      tolerance: 7
+
+    # Resize con aspect ratio
+    resize:
+      enabled: true
+      keep_aspect_ratio: true
+      interpolation: "area"  # area, linear, cubic
+
+    # CLAHE (Contrast Limited Adaptive Histogram Equalization)
+    clahe:
+      enabled: true
+      clip_limit: 2.0
+      grid_size: [8, 8]
+
+    # Maschera circolare
+    circle_crop:
+      enabled: true
+
+    # Normalizzazione pixel (0-1)
+    normalize:
+      enabled: false
+      mean: [0.485, 0.456, 0.406]
+      std: [0.229, 0.224, 0.225]
+
+    # Ben Graham preprocessing (sottrazione media locale)
+    ben_graham:
+      enabled: true
+      sigma: 10
+
+  # Visualizzazione pipeline
+  visualization:
+    enabled: true
+    num_samples: 4
 
 # Data Augmentation
 augmentation:
@@ -52,10 +95,96 @@ model:
     3: "Severe"
     4: "Proliferative"
 
+  # Freeze layers
+  freeze:
+    enabled: true
+    # Numero di epoche con backbone congelato (fine-tuning graduale)
+    epochs: 3
+    # Pattern layer da congelare (regex). Vuoto = congela tutto il backbone
+    # Esempi: "blocks.[0-4]" congela i primi 5 blocchi
+    pattern: ""
+
 # Training
 training:
+  # Epoche totali
+  epochs: 30
+
+  # Bilanciamento classi
   use_class_weights: true
   use_oversampling: false
+
+  # Optimizer
+  optimizer:
+    name: "adamw"  # adam, adamw, sgd
+    lr: 1.0e-4
+    weight_decay: 1.0e-5
+    # Solo per SGD
+    momentum: 0.9
+    nesterov: true
+
+  # Scheduler
+  scheduler:
+    name: "cosine_warmup"  # cosine_warmup, cosine, step, plateau, onecycle
+    # Warmup
+    warmup_epochs: 2
+    warmup_lr: 1.0e-6
+    # Per CosineAnnealing
+    min_lr: 1.0e-7
+    # Per StepLR
+    step_size: 10
+    gamma: 0.1
+    # Per ReduceLROnPlateau
+    patience: 5
+    factor: 0.5
+
+  # Loss function
+  loss:
+    name: "focal"  # focal, cross_entropy
+    # Focal Loss params
+    gamma: 2.0
+    # Label smoothing
+    label_smoothing: 0.1
+
+  # Regolarizzazione
+  gradient_clip: 1.0
+
+  # Mixed precision (AMP)
+  use_amp: true
+
+  # Early stopping
+  early_stopping:
+    enabled: true
+    patience: 7
+    min_delta: 0.001
+    monitor: "val_kappa"  # val_loss, val_acc, val_kappa
+    mode: "max"  # min per loss, max per accuracy/kappa
+
+  # Checkpointing
+  checkpoint:
+    save_best: true
+    save_last: true
+    monitor: "val_kappa"
+    mode: "max"
+
+# Explainability (Fase 2)
+explainability:
+  # Grad-CAM++
+  gradcam:
+    target_layer: "blocks.5"  # Blocco con attenzione piu distribuita sulle lesioni
+    method: "gradcam++"  # gradcam, gradcam++
+    colormap: "jet"
+    alpha: 0.5  # Trasparenza overlay
+
+  # Visualizzazione
+  visualization:
+    samples_per_class: 3
+    save_individual: true
+    output_dir: "results/gradcam"
+
+  # Validazione quantitativa (DDR dataset)
+  validation:
+    output_dir: "results/gradcam_validation"
+    iou_thresholds: [0.3, 0.5, 0.7]
 
 # Seed
 seed: 42
