@@ -87,7 +87,7 @@ model:
   architecture: "efficientnet_b5"
   num_classes: 5
   pretrained: true
-  dropout_rate: 0.4
+  dropout_rate: 0.5
   class_names:
     0: "No DR"
     1: "Mild"
@@ -99,7 +99,7 @@ model:
   freeze:
     enabled: true
     # Numero di epoche con backbone congelato (fine-tuning graduale)
-    epochs: 3
+    epochs: 5
     # Pattern layer da congelare (regex). Vuoto = congela tutto il backbone
     # Esempi: "blocks.[0-4]" congela i primi 5 blocchi
     pattern: ""
