@@ -1,0 +1,44 @@
+{
+  "validation": {
+    "accuracy": 0.8337434094903339,
+    "kappa": 0.8062810123337912,
+    "f1_macro": 0.6136302560094616,
+    "f1_weighted": 0.8259043760099947,
+    "f1_per_class": [
+      0.9290771630865234,
+      0.3603851444291609,
+      0.6655610834715312,
+      0.44363636363636366,
+      0.6694915254237288
+    ]
+  },
+  "test": {
+    "accuracy": 0.7385321100917431,
+    "kappa": 0.8005618571906892,
+    "f1_macro": 0.6042158618737767,
+    "f1_weighted": 0.7059644675384746,
+    "f1_per_class": [
+      0.8605395518975766,
+      0.1774193548387097,
+      0.6910569105691057,
+      0.5777777777777777,
+      0.7142857142857143
+    ]
+  },
+  "config": {
+    "model": "efficientnet_b5",
+    "epochs_trained": 27,
+    "best_model_path": "/mnt/c/Repository/multi-method-xai-diabetic-retinopathy/checkpoints/best_model_improved_20260204_144640.pt",
+    "improvements": {
+      "oversampling": true,
+      "focal_gamma": 2.0,
+      "mixup_alpha": 0.0,
+      "cutmix_alpha": 0.0,
+      "class_conditional_augmentation": true,
+      "minority_classes": [
+        3,
+        4
+      ]
+    }
+  }
+}

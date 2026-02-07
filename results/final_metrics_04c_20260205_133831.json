@@ -1,0 +1,44 @@
+{
+  "validation": {
+    "accuracy": 0.8423550087873463,
+    "kappa": 0.8338566826159468,
+    "f1_macro": 0.6362356756409859,
+    "f1_weighted": 0.8397148755395532,
+    "f1_per_class": [
+      0.9413901671106806,
+      0.44014510278113667,
+      0.6551928783382789,
+      0.48502994011976047,
+      0.6594202898550725
+    ]
+  },
+  "test": {
+    "accuracy": 0.7631880733944955,
+    "kappa": 0.8239818629602794,
+    "f1_macro": 0.6654004323700327,
+    "f1_weighted": 0.7565553084263472,
+    "f1_per_class": [
+      0.877431906614786,
+      0.4050632911392405,
+      0.7009735744089013,
+      0.6863905325443787,
+      0.6571428571428571
+    ]
+  },
+  "stage1": {
+    "best_kappa": 0.7864805986817427,
+    "epochs_trained": 25,
+    "checkpoint": "/mnt/c/Repository/multi-method-xai-diabetic-retinopathy/checkpoints/best_model_04c_stage1_20260205_133831.pt"
+  },
+  "stage2": {
+    "best_kappa": 0.684314780795598,
+    "epochs_trained": 25,
+    "checkpoint": "/mnt/c/Repository/multi-method-xai-diabetic-retinopathy/checkpoints/best_model_04c_stage2_20260205_133831.pt"
+  },
+  "config": {
+    "model": "efficientnet_b5",
+    "strategy": "TWO_STAGE_HIERARCHICAL",
+    "stage1_classes": 2,
+    "stage2_classes": 4
+  }
+}
