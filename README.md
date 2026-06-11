@@ -1,72 +1,76 @@
 # Multi-Method Rule Extraction from Deep Learning for Interpretable Diabetic Retinopathy Grading
 
-Progetto di Tesi di Laurea
+Bachelor's Thesis Project
 
-**Autore:** Antonio Colamartino
+**Author:** Antonio Colamartino
 **Email:** a.colamartino6@studenti.uniba.it
-**Matricola:** 778730
-**Università:** Università degli Studi di Bari Aldo Moro (UniBA)
+**Student ID:** 778730
+**Institution:** University of Bari Aldo Moro (UniBA), Department of Computer Science
+
+> **Paper:** a manuscript based on this work is currently in preparation.
 
 ---
 
-## Descrizione
+## Abstract
 
-Questo progetto propone un sistema ibrido per la classificazione della retinopatia diabetica (Diabetic Retinopathy, DR) che combina le elevate prestazioni delle reti neurali profonde con l'interpretabilità delle regole estratte. L'obiettivo principale è sviluppare un sistema di supporto alle decisioni cliniche che sia sia accurato che comprensibile per i medici.
+This project proposes a hybrid system for diabetic retinopathy (DR) grading that combines the predictive performance of deep neural networks with the interpretability of extracted rules. The primary goal is a clinical decision support system that is both accurate and understandable to clinicians.
 
-La retinopatia diabetica è una delle principali cause di cecità nel mondo e la sua diagnosi precoce è fondamentale per prevenire la perdita della vista. I modelli di deep learning hanno dimostrato eccellenti capacità predittive, ma la loro natura "black-box" limita l'adozione in ambito clinico dove la trasparenza delle decisioni è cruciale.
+Diabetic retinopathy is one of the leading causes of blindness worldwide, and early diagnosis is essential to prevent vision loss. Deep learning models have shown excellent predictive capabilities, but their black-box nature limits adoption in clinical settings, where transparency of decisions is critical.
 
-## Obiettivi
+## Objectives
 
-1. **Training di un modello CNN ad alte prestazioni** per la classificazione multi-classe della DR
-2. **Analisi dell'explainability** tramite tecniche di saliency mapping e validazione quantitativa
-3. **Estrazione di regole interpretabili** attraverso tre metodologie differenti
-4. **Sviluppo di un sistema ibrido** che integri CNN e regole in modalità operative diverse
+1. **Training a high-performance CNN** for multi-class DR grading
+2. **Explainability analysis** through saliency mapping techniques and quantitative validation
+3. **Extraction of interpretable rules** using three different methodologies
+4. **Development of a hybrid system** that integrates the CNN and the rules under different operating modes
 
-## Architettura del Progetto
+## Methodology
 
-### Fase 1 - Teacher CNN Training
+### Phase 1: Teacher CNN Training
 
-| Componente    | Specifica                                    |
+| Component     | Specification                                |
 | ------------- | -------------------------------------------- |
-| Architettura  | EfficientNet-B5 (30M parametri)              |
-| Task          | Multi-class classification (5 classi DR)     |
-| Classi        | No DR, Mild, Moderate, Severe, Proliferative |
-| Loss Function | Focal Loss + Label Smoothing (epsilon=0.1)   |
+| Architecture  | EfficientNet-B5 (30M parameters)             |
+| Task          | Multi-class classification (5 DR grades)     |
+| Classes       | No DR, Mild, Moderate, Severe, Proliferative |
+| Loss function | Focal Loss + Label Smoothing (epsilon=0.1)   |
 
-### Fase 2 - Explainability Analysis
+### Phase 2: Explainability Analysis
 
-- **Saliency Maps:** Grad-CAM++ per la visualizzazione delle regioni rilevanti
-- **Validazione Quantitativa:** Deletion/Insertion AUC, IoU con ground-truth lesions (DDR dataset)
-- **Confronto Layer:** Analisi multi-layer per identificare il livello ottimale
+- **Saliency maps:** Grad-CAM++ for visualising the regions relevant to the prediction
+- **Quantitative validation:** Deletion/Insertion AUC, IoU against ground-truth lesions (DDR dataset)
+- **Layer comparison:** multi-layer analysis to identify the optimal level of abstraction
 
-### Fase 3 - Rule Extraction
+### Phase 3: Rule Extraction
 
-Tre metodi comparati per l'estrazione di regole interpretabili:
+Three methods compared for the extraction of interpretable rules:
 
-| Metodo                         | Output                               |
-| ------------------------------ | ------------------------------------ |
-| A - Decision Tree Distillation | Interpretable tree con if-then rules |
-| B - LIME-based Explanations    | Local interpretable explanations     |
-| C - RIPPER One-vs-Rest         | Ordered rule list (RIPPER Algorithm) |
+| Method                         | Output                                |
+| ------------------------------ | ------------------------------------- |
+| A - Decision Tree Distillation | Interpretable tree with if-then rules |
+| B - LIME-based Explanations    | Local interpretable explanations      |
+| C - RIPPER One-vs-Rest         | Ordered rule list (RIPPER algorithm)  |
 
-### Fase 4 - Sistema Ibrido
+### Phase 4: Hybrid System
 
-| Modalità               | Strategia                                                |
+| Mode                   | Strategy                                                 |
 | ---------------------- | -------------------------------------------------------- |
-| Post-hoc Explanation   | CNN prediction con post-hoc rule explanation via DT      |
-| Rule-guided Prediction | IF DT confidence > threshold THEN use DT ELSE use CNN   |
+| Post-hoc Explanation   | CNN prediction with post-hoc rule explanation via DT     |
+| Rule-guided Prediction | IF DT confidence > threshold THEN use DT ELSE use CNN    |
 | Weighted Ensemble      | alpha * CNN_proba + (1-alpha) * DT_proba                 |
 
-## Dataset
+## Datasets
 
-| Dataset                  | Immagini | Utilizzo                                |
-| ------------------------ | -------- | --------------------------------------- |
-| APTOS 2019               | 3,296    | Training CNN (train + validation)       |
-| Kaggle EyePACS 2015      | 35,126   | Training CNN (merge per 38,056 totali)  |
-| Messidor-2               | 1,744    | External validation (Testing)           |
-| DDR (lesion annotations) | 12,522   | XAI Validation (pixel-level masks)      |
+| Dataset                  | Images | Role                                                  |
+| ------------------------ | ------ | ----------------------------------------------------- |
+| APTOS 2019               | 3,296  | Primary corpus (merged with EyePACS)                  |
+| Kaggle EyePACS 2015      | 35,126 | Primary corpus (37,933 images in total after cleaning) |
+| Messidor-2               | 1,744  | Earlier cross-dataset experiments                     |
+| DDR (lesion annotations) | 12,522 | XAI validation (pixel-level masks)                    |
 
-### Struttura della Cartella Data
+The combined APTOS + EyePACS corpus (37,933 fundus images after cleaning and merging) is partitioned into training (80%, n=30,346), validation (10%, n=3,793) and internal test (10%, n=3,794) sets using a stratified split.
+
+### Data Directory Layout
 
 ```
 Data/
@@ -98,67 +102,67 @@ Data/
         └── lesion_detection/
 ```
 
-## Analisi Esplorativa dei Dati
+## Exploratory Data Analysis
 
-L'analisi esplorativa dei dataset ha evidenziato le seguenti caratteristiche:
+The exploratory analysis of the datasets highlighted the following characteristics.
 
-### Statistiche dei Dataset
+### Dataset Statistics
 
-| Dataset      | Immagini Totali | Split                                   |
-| ------------ | --------------- | --------------------------------------- |
-| APTOS 2019   | 3,296           | Train: 2,930 / Val: 366                 |
-| EyePACS 2015 | 35,126          | Train only                              |
-| Messidor-2   | 1,744           | Test set esterno                        |
-| DDR          | 12,522          | Train: 6,265 / Val: 2,508 / Test: 3,749 |
+| Dataset      | Total images | Use                                     |
+| ------------ | ------------ | --------------------------------------- |
+| APTOS 2019   | 3,296        | Primary corpus                          |
+| EyePACS 2015 | 35,126       | Primary corpus                          |
+| Messidor-2   | 1,744        | Earlier cross-dataset experiments       |
+| DDR          | 12,522       | XAI validation                          |
 
-**Dataset Combinato per Training:** 38,056 immagini (APTOS train + EyePACS)
+**Combined dataset:** 37,933 images (APTOS + EyePACS after cleaning), stratified 80/10/10 split
 
-### Distribuzione delle Classi
+### Class Distribution
 
-La distribuzione delle classi nel dataset combinato di training mostra un significativo sbilanciamento, tipico dei dataset medici:
+The class distribution of the combined training set shows a significant imbalance, typical of medical datasets:
 
-| Classe | Nome          | Immagini | Percentuale |
-| ------ | ------------- | -------- | ----------- |
-| 0      | No DR         | 27,244   | 71.6%       |
-| 1      | Mild          | 2,743    | 7.2%        |
-| 2      | Moderate      | 6,100    | 16.0%       |
-| 3      | Severe        | 1,027    | 2.7%        |
-| 4      | Proliferative | 942      | 2.5%        |
+| Class | Name          | Images | Share |
+| ----- | ------------- | ------ | ----- |
+| 0     | No DR         | 27,244 | 71.8% |
+| 1     | Mild NPDR     | 2,743  | 7.2%  |
+| 2     | Moderate NPDR | 6,100  | 16.1% |
+| 3     | Severe NPDR   | 1,027  | 2.7%  |
+| 4     | Proliferative | 819    | 2.2%  |
 
-**Rapporto di sbilanciamento massimo:** 28.9:1 (classe 0 vs classe 4)
+**Maximum imbalance ratio:** 33.3:1 (class 0 vs class 4)
 
-### Visualizzazioni
+### Visualisations
 
-#### Distribuzione per Dataset
+#### Distribution by Dataset
 
-![Distribuzione classi per dataset](results/class_distribution_by_dataset.png)
+![Class distribution by dataset](results/class_distribution_by_dataset.png)
 
-#### Confronto tra Dataset
+#### Cross-dataset Comparison
 
-![Confronto distribuzione classi](results/class_distribution_comparison.png)
+![Class distribution comparison](results/class_distribution_comparison.png)
 
-### Note sul Dataset DDR
+### Note on the DDR Dataset
 
-Il dataset DDR contiene originariamente una classe 5 ("ungradable") che è stata esclusa dall'analisi in quanto non rappresenta un grado di severità della DR ma indica immagini non classificabili.
+The DDR dataset originally includes a class 5 ("ungradable"), which was excluded from the analysis as it does not represent a DR severity grade but rather marks images that cannot be graded.
 
 ---
 
-## Preprocessing delle Immagini
+## Image Preprocessing
 
-Tutte le immagini sono preprocessate con una pipeline configurabile tramite `config.yaml`. Le tecniche sono attivabili/disattivabili singolarmente.
+All images are preprocessed with a pipeline configurable through `config.yaml`. Each technique can be enabled or disabled individually.
 
-### Pipeline di Preprocessing
+### Preprocessing Pipeline
 
-| Step | Tecnica         | Descrizione                                                | Parametri                    |
-| ---- | --------------- | ---------------------------------------------------------- | ---------------------------- |
-| 1    | Crop bordi neri | Rimozione automatica dei bordi scuri attorno alla retina   | tolerance: 7                 |
-| 2    | Resize          | Ridimensionamento mantenendo aspect ratio                  | 456x456, interpolation: area |
-| 3    | CLAHE           | Contrast Limited Adaptive Histogram Equalization           | clip_limit: 2.0, grid: 8x8   |
-| 4    | Ben Graham      | Sottrazione media locale per normalizzazione illuminazione | sigma: 10                    |
-| 5    | Circle crop     | Maschera circolare per uniformare le immagini              | -                            |
-| 6    | Normalize       | Normalizzazione con statistiche ImageNet                   | mean: [0.485, 0.456, 0.406]  |
+| Step | Technique         | Description                                              | Parameters                   |
+| ---- | ----------------- | -------------------------------------------------------- | ---------------------------- |
+| 1    | Black border crop | Automatic removal of the dark borders around the retina  | tolerance: 7                 |
+| 2    | Resize            | Resizing while preserving the aspect ratio               | 456x456, interpolation: area |
+| 3    | CLAHE             | Contrast Limited Adaptive Histogram Equalization         | clip_limit: 2.0, grid: 8x8   |
+| 4    | Ben Graham        | Local mean subtraction for illumination normalisation    | sigma: 10                    |
+| 5    | Circle crop       | Circular mask to make the images uniform                 | -                            |
+| 6    | Normalize         | Normalisation with ImageNet statistics                   | mean: [0.485, 0.456, 0.406]  |
 
-### Configurazione (config.yaml)
+### Configuration (config.yaml)
 
 ```yaml
 preprocessing:
@@ -181,143 +185,130 @@ preprocessing:
       enabled: false
 ```
 
-### Statistiche Immagini Preprocessate
+### Preprocessed Image Statistics
 
-| Dataset    | Immagini | Split                                   |
-| ---------- | -------- | --------------------------------------- |
-| APTOS      | 3,296    | Train: 2,930 / Val: 366                 |
-| EyePACS    | 35,126   | Train                                   |
-| Messidor-2 | 1,744    | Test                                    |
-| DDR        | 12,522   | Train: 6,260 / Val: 2,503 / Test: 3,759 |
+All datasets are processed with the same pipeline before entering the training and evaluation stages.
 
-**Totale:** 52,688 immagini preprocessate
+### Pipeline Visualisation
 
-### Visualizzazione Pipeline
-
-![Pipeline di preprocessing](results/preprocessing_pipeline.png)
+![Preprocessing pipeline](results/preprocessing_pipeline.png)
 
 ---
 
 ## Data Augmentation
 
-Per migliorare la generalizzazione del modello e contrastare l'overfitting, viene applicata una pipeline di data augmentation durante il training.
+To improve model generalisation and counteract overfitting, a data augmentation pipeline is applied during training.
 
-### Trasformazioni Applicate
+### Applied Transformations
 
-| Trasformazione      | Parametri               | Probabilità |
-| ------------------- | ----------------------- | ------------ |
-| Horizontal Flip     | -                       | 50%          |
-| Vertical Flip       | -                       | 50%          |
-| Rotazione           | limite 180 gradi        | 50%          |
-| Brightness/Contrast | +/- 20%                 | 30%          |
-| Hue/Saturation      | hue +/- 10, sat +/- 20% | 30%          |
+| Transformation      | Parameters              | Probability |
+| ------------------- | ----------------------- | ----------- |
+| Horizontal flip     | -                       | 50%         |
+| Vertical flip       | -                       | 50%         |
+| Rotation            | up to 180 degrees       | 50%         |
+| Brightness/Contrast | +/- 20%                 | 30%         |
+| Hue/Saturation      | hue +/- 10, sat +/- 20% | 30%         |
 
-### Gestione Class Imbalance
+### Class Imbalance Handling
 
-Data la forte sproporzione tra le classi, vengono utilizzati class weights per bilanciare la loss function:
+Given the strong disproportion between classes, class weights are used to balance the loss function:
 
-| Classe | Nome          | Weight |
-| ------ | ------------- | ------ |
-| 0      | No DR         | 0.28   |
-| 1      | Mild          | 2.77   |
-| 2      | Moderate      | 1.25   |
-| 3      | Severe        | 7.43   |
-| 4      | Proliferative | 8.44   |
+| Class | Name          | Weight |
+| ----- | ------------- | ------ |
+| 0     | No DR         | 0.28   |
+| 1     | Mild          | 2.77   |
+| 2     | Moderate      | 1.25   |
+| 3     | Severe        | 7.43   |
+| 4     | Proliferative | 8.44   |
 
-### Esempi di Augmentation
+### Augmentation Examples
 
-![Esempi augmentation](results/augmentation_examples.png)
+![Augmentation examples](results/augmentation_examples.png)
 
 ---
 
-## Training del Modello
+## Model Training
 
-### Configurazione Training
+### Training Configuration
 
-| Parametro       | Valore                                         |
+| Parameter       | Value                                          |
 | --------------- | ---------------------------------------------- |
-| Architettura    | EfficientNet-B5                                |
+| Architecture    | EfficientNet-B5                                |
 | Input size      | 456x456                                        |
 | Batch size      | 16                                             |
 | Optimizer       | AdamW                                          |
 | Learning rate   | 1e-4                                           |
-| Scheduler       | Cosine Annealing con Warmup (2 epoche)         |
+| Scheduler       | Cosine annealing with warmup (2 epochs)        |
 | Loss function   | Focal Loss (gamma=2.0) + Label Smoothing (0.1) |
-| Early stopping  | Patience 7 su val_kappa                        |
-| Mixed precision | AMP abilitato                                  |
+| Early stopping  | Patience 7 on val_kappa                        |
+| Mixed precision | AMP enabled                                    |
 
-### Strategia di Training
+### Training Strategy
 
-1. **Freeze backbone** (3 epoche): Solo il classificatore viene trainato
-2. **Unfreeze** (epoche successive): Fine-tuning di tutta la rete
-3. **Early stopping**: Interrompe il training quando val_kappa non migliora per 7 epoche
+1. **Frozen backbone** (3 epochs): only the classifier head is trained
+2. **Unfreeze** (subsequent epochs): fine-tuning of the entire network
+3. **Early stopping**: training stops when val_kappa does not improve for 7 epochs
 
-### Risultati Training
+### Training Results
 
-| Set                | Accuracy | Cohen's Kappa | F1 Macro | F1 Weighted |
-| ------------------ | -------- | ------------- | -------- | ----------- |
-| Validation (APTOS) | 82.5%    | 0.909         | 0.662    | 0.816       |
-| Test (Messidor-2)  | 67.1%    | 0.745         | 0.643    | 0.690       |
+| Set           | Accuracy | Quadratic Weighted Kappa |
+| ------------- | -------- | ------------------------ |
+| Validation    | 82.86%   | 0.822                    |
+| Internal test | 82.95%   | 0.829                    |
 
-### F1-Score per Classe
+The Mild NPDR class remains the most challenging across all sets (F1-score around 0.39), due to the subtlety of isolated microaneurysms and the high inter-rater variability reported in the literature.
 
-| Classe | Nome          | Validation | Test  |
-| ------ | ------------- | ---------- | ----- |
-| 0      | No DR         | 0.979      | 0.777 |
-| 1      | Mild          | 0.610      | 0.398 |
-| 2      | Moderate      | 0.775      | 0.671 |
-| 3      | Severe        | 0.207      | 0.632 |
-| 4      | Proliferative | 0.737      | 0.735 |
+> **Note on repository artifacts.** The `results/` directory also contains metrics and plots from earlier experimental runs (including configurations with Messidor-2 used as an external test set), which differ from the final configuration reported above.
 
-### Curve di Training
+### Training Curves
 
-![Training History](results/training_history.png)
+![Training history](results/training_history.png)
 
-### Matrici di Confusione
+### Confusion Matrices
 
 #### Validation Set (APTOS)
 
-![Confusion Matrix Validation](results/confusion_matrix_val.png)
+![Confusion matrix, validation](results/confusion_matrix_val.png)
 
 #### Test Set (Messidor-2)
 
-![Confusion Matrix Test](results/confusion_matrix_test.png)
+![Confusion matrix, test](results/confusion_matrix_test.png)
 
-### Artefatti Generati
+### Generated Artifacts
 
-| File                               | Descrizione                     |
-| ---------------------------------- | ------------------------------- |
-| `checkpoints/best_model_*.pt`    | Modello con miglior val_kappa   |
-| `checkpoints/last_model_*.pt`    | Ultimo modello trainato         |
-| `results/training_history.png`   | Curve loss, accuracy, kappa, LR |
-| `results/confusion_matrix_*.png` | Matrici di confusione           |
-| `results/final_metrics_*.json`   | Metriche finali                 |
+| File                             | Description                            |
+| -------------------------------- | -------------------------------------- |
+| `checkpoints/best_model_*.pt`    | Model with the best val_kappa          |
+| `checkpoints/last_model_*.pt`    | Last trained model                     |
+| `results/training_history.png`   | Loss, accuracy, kappa and LR curves    |
+| `results/confusion_matrix_*.png` | Confusion matrices                     |
+| `results/final_metrics_*.json`   | Final metrics                          |
 
 ---
 
 ## Explainability Analysis (Grad-CAM++)
 
-### Approccio
+### Approach
 
-Grad-CAM++ viene utilizzato per generare saliency maps che evidenziano le regioni dell'immagine più rilevanti per la predizione del modello. L'analisi è stata condotta su tre layer della rete per identificare il livello ottimale di astrazione.
+Grad-CAM++ is used to generate saliency maps that highlight the image regions most relevant to the model prediction. The analysis was carried out on three layers of the network to identify the optimal level of abstraction.
 
-### Confronto Layer
+### Layer Comparison
 
-Sono stati confrontati tre layer di EfficientNet-B5 per determinare quale produce le mappe di attivazione più informative:
+Three layers of EfficientNet-B5 were compared to determine which produces the most informative activation maps:
 
-| Layer              | Risoluzione | Deletion AUC | Insertion AUC | Composite Score |
-| ------------------ | ----------- | ------------ | ------------- | --------------- |
-| blocks.2           | 57x57       | 0.388        | 0.428         | -               |
-| **blocks.4**       | **29x29**   | **0.330**    | **0.454**     | **0.125**       |
-| bn2                | 15x15       | 0.436        | 0.483         | -               |
+| Layer              | Resolution | Deletion AUC | Insertion AUC | Composite score |
+| ------------------ | ---------- | ------------ | ------------- | --------------- |
+| blocks.2           | 57x57      | 0.388        | 0.428         | -               |
+| **blocks.4**       | **29x29**  | **0.330**    | **0.454**     | **0.125**       |
+| bn2                | 15x15      | 0.436        | 0.483         | -               |
 
-**Layer selezionato:** `blocks.4` (29x29) sulla base del composite score (Insertion AUC - Deletion AUC), che bilancia la capacità di identificare regioni rilevanti (alta Insertion) con la specificità (bassa Deletion).
+**Selected layer:** `blocks.4` (29x29), chosen on the basis of the composite score (Insertion AUC - Deletion AUC), which balances the ability to identify relevant regions (high Insertion) with specificity (low Deletion).
 
-![Confronto Layer](results/gradcam/gradcam_layer_comparison.png)
+![Layer comparison](results/gradcam/gradcam_layer_comparison.png)
 
-### Deletion/Insertion AUC per Classe
+### Per-class Deletion/Insertion AUC
 
-| Classe        | Deletion AUC | Insertion AUC |
+| Class         | Deletion AUC | Insertion AUC |
 | ------------- | ------------ | ------------- |
 | No DR         | 0.622        | 0.606         |
 | Mild          | 0.344        | 0.400         |
@@ -326,74 +317,74 @@ Sono stati confrontati tre layer di EfficientNet-B5 per determinare quale produc
 | Proliferative | 0.341        | 0.614         |
 | **Overall**   | **0.330**    | **0.454**     |
 
-![Deletion/Insertion Curves](results/gradcam/deletion_insertion_curves.png)
+![Deletion/Insertion curves](results/gradcam/deletion_insertion_curves.png)
 
-### Validazione con Ground Truth (DDR Dataset)
+### Ground-truth Validation (DDR Dataset)
 
-La validazione quantitativa è stata condotta su 100 immagini del dataset DDR con annotazioni pixel-level delle lesioni:
+The quantitative validation was carried out on 100 images of the DDR dataset with pixel-level lesion annotations:
 
-| Metrica                 | Valore          |
-| ----------------------- | --------------- |
-| Pointing Game Accuracy  | 14.0%           |
-| IoU medio (threshold 0.3) | 0.039         |
-| IoU medio (threshold 0.5) | 0.045         |
-| IoU medio (threshold 0.7) | 0.036         |
+| Metric                     | Value |
+| -------------------------- | ----- |
+| Pointing game accuracy     | 14.0% |
+| Mean IoU (threshold 0.3)   | 0.039 |
+| Mean IoU (threshold 0.5)   | 0.045 |
+| Mean IoU (threshold 0.7)   | 0.036 |
 
-I bassi valori di IoU indicano che Grad-CAM++ cattura regioni più ampie rispetto alle annotazioni puntuali delle singole lesioni, un comportamento atteso poiché il modello apprende pattern contestuali e non solo la localizzazione precisa delle lesioni.
+The low IoU values indicate that Grad-CAM++ captures broader regions than the point-wise annotations of individual lesions - an expected behaviour, since the model learns contextual patterns rather than the precise localisation of each lesion.
 
-### Visualizzazioni
+### Visualisations
 
-#### Grad-CAM++ Grid per Classe
+#### Grad-CAM++ Grid by Class
 
-![Grad-CAM Grid](results/gradcam/gradcam_grid_by_class.png)
+![Grad-CAM grid](results/gradcam/gradcam_grid_by_class.png)
 
-#### Mean Heatmap per Classe
+#### Mean Heatmap by Class
 
-![Mean Heatmap](results/gradcam/mean_heatmap_per_class.png)
+![Mean heatmap](results/gradcam/mean_heatmap_per_class.png)
 
 #### Grad-CAM++ vs Ground Truth (DDR)
 
-![Grad-CAM vs Ground Truth](results/gradcam_validation/gradcam_vs_ground_truth.png)
+![Grad-CAM vs ground truth](results/gradcam_validation/gradcam_vs_ground_truth.png)
 
 ---
 
 ## Rule Extraction
 
-### Approccio
+### Approach
 
-L'estrazione di regole interpretabili avviene in tre fasi: (1) estrazione delle features dal penultimo layer della CNN (2048 dimensioni), (2) riduzione dimensionale via PCA, (3) training di modelli interpretabili sulle predizioni della CNN (knowledge distillation).
+The extraction of interpretable rules proceeds in three steps: (1) feature extraction from the penultimate layer of the CNN (2,048 dimensions), (2) dimensionality reduction via PCA, (3) training of interpretable models on the CNN predictions (knowledge distillation).
 
-### PCA - Riduzione Dimensionale
+### PCA: Dimensionality Reduction
 
-| Parametro                | Valore |
-| ------------------------ | ------ |
-| Features originali       | 2,048  |
-| Componenti PCA           | 12     |
-| Varianza spiegata        | 95.2%  |
+| Parameter          | Value |
+| ------------------ | ----- |
+| Original features  | 2,048 |
+| PCA components     | 12    |
+| Explained variance | 95.2% |
 
-![PCA Variance](results/rule_extraction/pca_variance.png)
+![PCA variance](results/rule_extraction/pca_variance.png)
 
-### Metodo A: Decision Tree Distillation
+### Method A: Decision Tree Distillation
 
-Il Decision Tree viene trainato per replicare le predizioni della CNN (non le label originali), massimizzando la fidelity.
+The Decision Tree is trained to replicate the CNN predictions (rather than the original labels), maximising fidelity.
 
-#### Risultati Decision Tree (depth=12)
+#### Decision Tree Results (depth=12)
 
-| Metrica        | Validation | Test   |
-| -------------- | ---------- | ------ |
-| Fidelity       | 92.6%      | 88.2%  |
-| Accuracy       | 84.3%      | 65.8%  |
-| F1 Macro       | 0.718      | 0.622  |
+| Metric          | Validation | Test  |
+| --------------- | ---------- | ----- |
+| Fidelity        | 92.6%      | 88.2% |
+| Accuracy (test) | -          | 82%   |
+| F1 Macro (test) | -          | 0.62  |
 
-| Complessità    | Valore |
-| -------------- | ------ |
-| Nodi totali    | 1,909  |
-| Foglie         | 955    |
-| Profondità max | 12     |
+| Complexity  | Value |
+| ----------- | ----- |
+| Total nodes | 1,909 |
+| Leaves      | 955   |
+| Max depth   | 12    |
 
-#### Fidelity per Classe (Test)
+#### Per-class Fidelity (Test)
 
-| Classe        | Fidelity |
+| Class         | Fidelity |
 | ------------- | -------- |
 | No DR         | 93.9%    |
 | Mild          | 83.3%    |
@@ -401,87 +392,87 @@ Il Decision Tree viene trainato per replicare le predizioni della CNN (non le la
 | Severe        | 87.7%    |
 | Proliferative | 84.8%    |
 
-#### Ablation Study - Profondità DT
+#### Ablation Study: DT Depth
 
-| Depth | Nodi  | Foglie | Fidelity Val | Fidelity Test |
-| ----- | ----- | ------ | ------------ | ------------- |
-| 4     | 31    | 16     | 87.6%        | 76.3%         |
-| 6     | 127   | 64     | 90.9%        | 82.7%         |
-| 8     | 433   | 217    | 92.0%        | 85.8%         |
-| 10    | 1,091 | 546    | 92.7%        | 87.7%         |
-| 12    | 1,909 | 955    | 92.6%        | 88.2%         |
-| 16    | 2,763 | 1,382  | 92.2%        | 88.3%         |
+| Depth | Nodes | Leaves | Fidelity (val) | Fidelity (test) |
+| ----- | ----- | ------ | -------------- | --------------- |
+| 4     | 31    | 16     | 87.6%          | 76.3%           |
+| 6     | 127   | 64     | 90.9%          | 82.7%           |
+| 8     | 433   | 217    | 92.0%          | 85.8%           |
+| 10    | 1,091 | 546    | 92.7%          | 87.7%           |
+| 12    | 1,909 | 955    | 92.6%          | 88.2%           |
+| 16    | 2,763 | 1,382  | 92.2%          | 88.3%           |
 
-La fidelity si stabilizza a depth 10-12, con rendimenti marginali decrescenti per profondità superiori.
+Fidelity stabilises at depth 10-12, with diminishing returns for greater depths.
 
-![DT Ablation](results/rule_extraction/dt_ablation_depth.png)
+![DT ablation](results/rule_extraction/dt_ablation_depth.png)
 
-### Metodo B: RIPPER One-vs-Rest
+### Method B: RIPPER One-vs-Rest
 
-L'algoritmo RIPPER genera regole compatte in formato if-then per ciascuna classe.
+The RIPPER algorithm generates compact if-then rules for each class.
 
-#### Risultati RIPPER
+#### RIPPER Results
 
-| Metrica        | Validation | Test   |
-| -------------- | ---------- | ------ |
-| Fidelity       | 79.8%      | 63.0%  |
-| Accuracy       | 81.6%      | 68.2%  |
-| F1 Macro       | 0.614      | 0.558  |
+| Metric          | Test  |
+| --------------- | ----- |
+| Fidelity        | 63.0% |
+| Accuracy        | 79%   |
+| F1 Macro        | 0.51  |
 
-| Complessità         | Valore |
-| ------------------- | ------ |
-| Numero regole       | 48     |
-| Condizioni totali   | 48     |
-| Media condizioni    | 1.0    |
+| Complexity         | Value |
+| ------------------ | ----- |
+| Number of rules    | 48    |
+| Total conditions   | 48    |
+| Mean conditions    | 1.0   |
 
-### Metodo C: LIME Local Explanations
+### Method C: LIME Local Explanations
 
-LIME fornisce spiegazioni locali per singole predizioni, complementando gli approcci globali di DT e RIPPER.
+LIME provides local explanations for individual predictions, complementing the global approaches of DT and RIPPER.
 
-| Parametro               | Valore        |
-| ------------------------ | ------------- |
-| Campioni per spiegazione | 1,000         |
-| Immagini spiegate        | 25            |
-| Stability IoU (media)    | 0.263 ± 0.125 |
-| Runs per stabilità       | 5             |
+| Parameter               | Value         |
+| ----------------------- | ------------- |
+| Samples per explanation | 1,000         |
+| Explained images        | 25            |
+| Stability IoU (mean)    | 0.263 ± 0.125 |
+| Runs for stability      | 5             |
 
 ![LIME vs Grad-CAM++](results/rule_extraction/lime_vs_gradcam.png)
 
-### Confronto Metodi
+### Method Comparison
 
-| Metrica           | Decision Tree (d=12) | RIPPER      |
-| ----------------- | -------------------- | ----------- |
-| Fidelity (val)    | 92.6%                | 79.8%       |
-| Fidelity (test)   | 88.2%                | 63.0%       |
-| Accuracy (test)   | 65.8%                | 68.2%       |
-| F1 Macro (test)   | 0.622                | 0.558       |
-| Complessità       | 1,909 nodi           | 48 regole   |
-| Interpretabilità  | Media                | Alta        |
+| Metric           | Decision Tree (d=12) | RIPPER    |
+| ---------------- | -------------------- | --------- |
+| Fidelity (val)   | 92.6%                | -         |
+| Fidelity (test)  | 88.2%                | 63.0%     |
+| Accuracy (test)  | 82%                  | 79%       |
+| F1 Macro (test)  | 0.62                 | 0.51      |
+| Complexity       | 1,909 nodes          | 48 rules  |
+| Interpretability | Medium               | High      |
 
-Il Decision Tree raggiunge la fidelity più alta (92.6%), rendendolo il candidato ideale per la spiegazione post-hoc delle predizioni CNN. RIPPER privilegia la compattezza (48 regole vs 955 foglie) al costo di una fidelity inferiore.
+The Decision Tree achieves the highest fidelity (92.6%), making it the ideal candidate for the post-hoc explanation of CNN predictions. RIPPER favours compactness (48 rules vs 955 leaves) at the cost of lower fidelity.
 
-![Confronto Metodi](results/rule_extraction/method_comparison.png)
+![Method comparison](results/rule_extraction/method_comparison.png)
 
 ---
 
-## Sistema Ibrido
+## Hybrid System
 
-### Approccio
+### Approach
 
-Il sistema ibrido integra la CNN teacher con i modelli a regole attraverso tre strategie operative, ciascuna con un diverso trade-off tra performance e interpretabilità.
+The hybrid system integrates the teacher CNN with the rule-based models through three operating strategies, each with a different trade-off between performance and interpretability.
 
-### Strategia 1: Post-hoc Explanation
+### Strategy 1: Post-hoc Explanation
 
-La CNN produce la predizione; il Decision Tree fornisce una spiegazione in forma di regola. La copertura indica la percentuale di predizioni CNN fedelmente replicate dal DT.
+The CNN produces the prediction; the Decision Tree provides an explanation in rule form. Coverage indicates the share of CNN predictions faithfully replicated by the DT.
 
-| Metrica                    | Valore |
-| -------------------------- | ------ |
-| Coverage (agreement CNN-DT) | 88.2%  |
-| Lunghezza media regola     | 11.2   |
+| Metric                      | Value |
+| --------------------------- | ----- |
+| Coverage (CNN-DT agreement) | 88.2% |
+| Mean rule length            | 11.2  |
 
-#### Agreement per Classe (Test)
+#### Per-class Agreement (Test)
 
-| Classe        | Agreement |
+| Class         | Agreement |
 | ------------- | --------- |
 | No DR         | 93.9%     |
 | Mild          | 83.3%     |
@@ -489,107 +480,106 @@ La CNN produce la predizione; il Decision Tree fornisce una spiegazione in forma
 | Severe        | 87.7%     |
 | Proliferative | 84.8%     |
 
-![Post-hoc Analysis](results/hybrid_system/posthoc_analysis.png)
+![Post-hoc analysis](results/hybrid_system/posthoc_analysis.png)
 
-### Strategia 2: Rule-Guided Classification
+### Strategy 2: Rule-Guided Classification
 
-Il Decision Tree classifica se la sua confidenza supera una soglia; altrimenti la CNN decide.
+The Decision Tree classifies when its confidence exceeds a threshold; otherwise the CNN decides.
 
-| Parametro          | Valore |
-| ------------------ | ------ |
-| Soglia ottimale    | 0.575  |
-| Coverage DT        | 99.4%  |
-| Accuracy           | 66.1%  |
-| F1 Macro           | 0.623  |
-| Fidelity vs CNN    | 88.6%  |
+| Parameter         | Value |
+| ----------------- | ----- |
+| Optimal threshold | 0.575 |
+| DT coverage       | 99.4% |
+| Accuracy          | 82%   |
+| F1 Macro          | 0.62  |
 
-L'alta coverage del DT (99.4%) indica che il DT è quasi sempre confidente, lasciando poco spazio alla CNN per intervenire.
+The high DT coverage (99.4%) indicates that the DT is almost always confident, leaving little room for the CNN to intervene.
 
-![Rule-Guided Sweep](results/hybrid_system/rule_guided_sweep.png)
+![Rule-guided sweep](results/hybrid_system/rule_guided_sweep.png)
 
-### Strategia 3: Weighted Ensemble
+### Strategy 3: Weighted Ensemble
 
-Combinazione pesata delle probabilità: `alpha * CNN_proba + (1-alpha) * DT_proba`.
+Weighted combination of the probabilities: `alpha * CNN_proba + (1-alpha) * DT_proba`.
 
-| Parametro       | Valore |
-| --------------- | ------ |
-| Alpha ottimale  | 1.0    |
-| Accuracy        | 67.2%  |
-| F1 Macro        | 0.644  |
+| Parameter     | Value |
+| ------------- | ----- |
+| Optimal alpha | 1.0   |
+| Accuracy      | 82%   |
+| F1 Macro      | 0.63  |
 
-Il valore ottimale di alpha=1.0 (pura CNN) indica che il DT non migliora le performance predittive della CNN. Il valore del DT risiede nell'interpretabilità, non nel miglioramento predittivo.
+The optimal value alpha=1.0 (pure CNN) indicates that the DT does not improve the predictive performance of the CNN. The value of the DT lies in interpretability, not in predictive improvement.
 
-![Ensemble Alpha Sweep](results/hybrid_system/ensemble_alpha_sweep.png)
+![Ensemble alpha sweep](results/hybrid_system/ensemble_alpha_sweep.png)
 
-### Confronto Strategie
+### Strategy Comparison
 
-| Strategia                | Accuracy | F1 Macro | Kappa |
-| ------------------------ | -------- | -------- | ----- |
-| CNN-only                 | 67.2%    | 0.644    | 0.498 |
-| DT-only (d=12)           | 65.8%    | 0.622    | 0.471 |
-| RIPPER-only              | 68.2%    | 0.558    | 0.408 |
-| Post-hoc (CNN + DT expl) | 67.2%    | 0.644    | 0.498 |
-| Rule-Guided (t=0.575)    | 66.1%    | 0.623    | 0.475 |
-| Ensemble (alpha=1.0)     | 67.2%    | 0.644    | 0.498 |
+| Strategy                  | Accuracy | F1 Macro | QW Kappa | Interpretability      |
+| ------------------------- | -------- | -------- | -------- | --------------------- |
+| CNN-only (baseline)       | 83%      | 0.63     | 0.83     | None (black-box)      |
+| DT-only (d=12)            | 82%      | 0.62     | 0.80     | High (955 leaves)     |
+| RIPPER-only               | 79%      | 0.51     | 0.60     | Very high (48 rules)  |
+| Post-hoc (CNN + DT expl.) | 83%      | 0.63     | 0.83     | 88.2% explained       |
+| Rule-guided (t=0.575)     | 82%      | 0.62     | 0.80     | 99.4% explained       |
+| Ensemble (alpha=1.0)      | 82%      | 0.63     | 0.82     | Partial               |
 
-La strategia **Post-hoc Explanation** risulta ottimale: mantiene le performance della CNN e fornisce spiegazioni in forma di regola per l'88.2% delle predizioni.
+The **post-hoc explanation** strategy proves optimal: it preserves the CNN performance while providing rule-based explanations for 88.2% of the predictions.
 
-![Confronto Strategie](results/hybrid_system/strategy_comparison.png)
+![Strategy comparison](results/hybrid_system/strategy_comparison.png)
 
 ### Agreement Analysis
 
-| Coppia          | Agreement |
-| --------------- | --------- |
-| CNN - DT        | 88.2%     |
-| CNN - RIPPER    | 63.0%     |
-| DT - RIPPER     | 64.1%     |
-| Tutti unanimi   | 59.0%     |
+| Pair          | Agreement |
+| ------------- | --------- |
+| CNN - DT      | 88.2%     |
+| CNN - RIPPER  | 63.0%     |
+| DT - RIPPER   | 64.1%     |
+| All unanimous | 59.0%     |
 
-![Agreement Analysis](results/hybrid_system/agreement_analysis.png)
+![Agreement analysis](results/hybrid_system/agreement_analysis.png)
 
 ---
 
-## Metriche di Valutazione
+## Evaluation Metrics
 
-| Categoria          | Metrica                             | Descrizione                                           |
-| ------------------ | ----------------------------------- | ----------------------------------------------------- |
-| CNN Teacher        | Accuracy                            | Percentuale predizioni corrette                       |
-| CNN Teacher        | Per-class F1-score                  | Precisione/recall bilanciate per classe               |
-| CNN Teacher        | Cohen's Kappa (quadratic weighted)  | Concordanza pesata per classi ordinali                |
-| Explainability     | Deletion AUC                        | Calo performance rimuovendo pixel rilevanti           |
-| Explainability     | Insertion AUC                       | Crescita performance aggiungendo pixel rilevanti      |
-| Explainability     | IoU (Grad-CAM vs lesion masks)      | Sovrapposizione con annotazioni ground-truth          |
-| Rule Extraction    | Fidelity                            | Concordanza regole-CNN (knowledge distillation)       |
-| Rule Extraction    | Rule Complexity                     | Numero nodi/regole del modello interpretabile         |
-| Sistema Ibrido     | Coverage                            | Percentuale predizioni spiegabili                     |
+| Category        | Metric                             | Description                                       |
+| --------------- | ---------------------------------- | ------------------------------------------------- |
+| Teacher CNN     | Accuracy                           | Share of correct predictions                      |
+| Teacher CNN     | Per-class F1-score                 | Class-wise balanced precision/recall              |
+| Teacher CNN     | Cohen's Kappa (quadratic weighted) | Weighted agreement for ordinal classes            |
+| Explainability  | Deletion AUC                       | Performance drop when removing relevant pixels    |
+| Explainability  | Insertion AUC                      | Performance growth when adding relevant pixels    |
+| Explainability  | IoU (Grad-CAM vs lesion masks)     | Overlap with ground-truth annotations             |
+| Rule Extraction | Fidelity                           | Rule-CNN agreement (knowledge distillation)       |
+| Rule Extraction | Rule complexity                    | Number of nodes/rules of the interpretable model  |
+| Hybrid System   | Coverage                           | Share of explainable predictions                  |
 
-## Struttura del Progetto
+## Project Structure
 
 ```
 multi-method-xai-diabetic-retinopathy/
 ├── notebooks/
-│   ├── 01_data_exploration.ipynb       # Analisi esplorativa dei dataset
-│   ├── 02_preprocessing.ipynb          # Pipeline di preprocessing
-│   ├── 03_augmentation.ipynb           # Data augmentation e class balancing
-│   ├── 04_analysis.ipynb               # Training del modello CNN
-│   ├── 05_gradcam.ipynb                # Grad-CAM++ e validazione quantitativa
-│   ├── 06_rule_extraction.ipynb        # Estrazione regole (DT, RIPPER, LIME)
-│   └── 07_hybrid_system.ipynb          # Sistema ibrido (3 strategie)
-├── scripts/                            # Script di utilità
-├── checkpoints/                        # Modelli salvati
-├── results/                            # Risultati e visualizzazioni
-│   ├── gradcam/                        # Saliency maps e confronti
-│   ├── gradcam_validation/             # Validazione con DDR ground truth
-│   ├── rule_extraction/                # Metriche e plot rule extraction
-│   └── hybrid_system/                  # Risultati sistema ibrido
-├── config.yaml                         # Configurazione centralizzata
-├── requirements.txt                    # Dipendenze Python
+│   ├── 01_data_exploration.ipynb       # Exploratory analysis of the datasets
+│   ├── 02_preprocessing.ipynb          # Preprocessing pipeline
+│   ├── 03_augmentation.ipynb           # Data augmentation and class balancing
+│   ├── 04_analysis.ipynb               # CNN training
+│   ├── 05_gradcam.ipynb                # Grad-CAM++ and quantitative validation
+│   ├── 06_rule_extraction.ipynb        # Rule extraction (DT, RIPPER, LIME)
+│   └── 07_hybrid_system.ipynb          # Hybrid system (3 strategies)
+├── scripts/                            # Utility scripts
+├── checkpoints/                        # Saved models
+├── results/                            # Results and visualisations
+│   ├── gradcam/                        # Saliency maps and comparisons
+│   ├── gradcam_validation/             # Validation against DDR ground truth
+│   ├── rule_extraction/                # Rule extraction metrics and plots
+│   └── hybrid_system/                  # Hybrid system results
+├── config.yaml                         # Centralised configuration
+├── requirements.txt                    # Python dependencies
 └── README.md
 ```
 
-## Contatti
+## Contact
 
 **Antonio Colamartino**
 Email: a.colamartino6@studenti.uniba.it
-Università degli Studi di Bari Aldo Moro
-Matricola: 778730
+University of Bari Aldo Moro
+Student ID: 778730
